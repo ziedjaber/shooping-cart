@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Set the background color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure the minimum viewport height */
+            background-image: url("Shopping.gif"); /* Add an animated shopping-related background */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .cart-container {
+            background-color: rgba(255, 255, 255, 0.8); /* Set the container background color with transparency */
+            padding: 20px;
+            border-radius: 20px; /* Create a square-shaped background with rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+            max-height: 800px; /* Limit the maximum height */
+            width: 100%; /* Make it responsive */
+            max-width: 1000px; /* Limit the maximum width */
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+        }
+        .cart-item .item-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .cart-item .item-info img {
+            max-width: 50px; /* Set the maximum width for the images */
+            margin-right: 10px; /* Add some spacing between the image and text */
+        }
+        .cart-item .item-actions {
+            display: flex;
+            align-items: center;
+        }
+        .cart-item button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 18px;
+        }
+        .cart-item .like-icon {
+            color: white; /* Change the heart icon color to white */
+            margin-right: 10px;
+            font-size: 24px; /* Increase the size of the heart icon */
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <h1 style="text-align: center; font-family: 'Times New Roman', Times, serif;border: 3px cornflowerblue solid ;border-radius: 12px;border-width: 400px height: 40px ;color: darkcyan;">Shopping Cart:Tech Area</h1>
+        <div id="cart-items">
+            <!-- Cart items will be dynamically added here using JavaScript -->
+        </div>
+        <p>Total Price: $<span id="total-price">0.00</span></p>
+    </div>
+    <script>
+        // Sample data for cart items with images
+        const cartItems = [
+            { 
+                name: "Asus Rog Flow", 
+                price: 1400, 
+                quantity: 0, 
+                liked: false, 
+                imageSrc: "asus.png" // Add the image source for each product
+            },
+            { 
+                name: "Asus Rog Strik G15", 
+                price: 1200, 
+                quantity: 0, 
+                liked: true, 
+                imageSrc: "asus3.png" 
+            },
+            { 
+                name: "MacBook Air",  
+                price: 1000, 
+                quantity: 0, 
+                liked: true, 
+                imageSrc: "mac1.png" 
+            },
+            { 
+                name: "MacBook PRO",  
+                price: 3000, 
+                quantity: 0, 
+                liked: true, 
+                imageSrc: "mac2.png" 
+            },
+            { 
+                name: "Asus Zeferus", 
+                price: 3500, 
+                quantity: 0, 
+                liked: false, 
+                imageSrc: "asus2.png" 
+            }
+        ];
+
+        const cartContainer = document.getElementById("cart-items");
+        const totalPriceSpan = document.getElementById("total-price");
+
+        // Function to update the cart items and total price
+        function updateCart() {
+            cartContainer.innerHTML = "";
+            let totalPrice = 0;
+
+            cartItems.forEach((item, index) => {
+                const itemDiv = document.createElement("div");
+                itemDiv.classList.add("cart-item");
+
+                const itemInfoDiv = document.createElement("div");
+                itemInfoDiv.classList.add("item-info");
+
+                // Add the image element
+                const imgElement = document.createElement("img");
+                imgElement.src = item.imageSrc;
+                itemInfoDiv.appendChild(imgElement);
+
+                // Add the product name and other details
+                const productDetailsDiv = document.createElement("div");
+                productDetailsDiv.innerHTML = `
+                    <p>${item.name}</p>
+                    <p>Price: $${item.price.toFixed(2)}</p>
+                    <p>Quantity: ${item.quantity}</p>
+                `;
+                itemInfoDiv.appendChild(productDetailsDiv);
+
+                const itemActionsDiv = document.createElement("div");
+                itemActionsDiv.classList.add("item-actions");
+
+                // Add buttons to increment and decrement quantity
+                const decrementButton = document.createElement("button");
+                decrementButton.textContent = "-";
+                decrementButton.addEventListener("click", () => {
+                    if (item.quantity > 0) {
+                        item.quantity--;
+                        updateCart();
+                    }
+                });
+
+                const incrementButton = document.createElement("button");
+                incrementButton.textContent = "+";
+                incrementButton.addEventListener("click", () => {
+                    item.quantity++;
+                    updateCart();
+                });
+
+                // Add the "J'adore" icon (heart)
+                const likeIcon = document.createElement("span");
+                likeIcon.classList.add("like-icon");
+                likeIcon.textContent = item.liked ? "❤️" : "🖤";
+                likeIcon.addEventListener("click", () => {
+                    item.liked = !item.liked;
+                    updateCart();
+                });
+
+                itemActionsDiv.appendChild(decrementButton);
+                itemActionsDiv.appendChild(incrementButton);
+                itemActionsDiv.appendChild(likeIcon);
+
+                itemDiv.appendChild(itemInfoDiv);
+                itemDiv.appendChild(itemActionsDiv);
+                cartContainer.appendChild(itemDiv);
+
+                totalPrice += item.price * item.quantity;
+            });
+
+            totalPriceSpan.textContent = totalPrice.toFixed(2);
+        }
+
+        // Initialize the cart
+        updateCart();
+    </script>
+</body>
+</html>
